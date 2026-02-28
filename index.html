@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="th" class="scroll-smooth">
+<html lang="th">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professional IT Resume</title>
+    <title>Wiroad Bunsree — IT Professional & Developer</title>
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -14,167 +15,219 @@
                 extend: {
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
+                        heading: ['Space Grotesk', 'sans-serif'],
                         mono: ['Fira Code', 'monospace'],
                     },
                     colors: {
-                        primary: '#0ea5e9', // Sky 500
-                        secondary: '#8b5cf6', // Violet 500
-                        dark: '#0f172a', // Slate 900
-                        darker: '#020617', // Slate 950
+                        primary: '#0ea5e9',
+                        secondary: '#8b5cf6',
+                        dark: '#0f172a',
+                        darker: '#020617',
                     }
                 }
             }
         }
     </script>
-    <!-- Google Fonts -->
+
+    <!-- Google Fonts: Space Grotesk + Inter + Fira Code -->
     <link
-        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
+
     <!-- Alpine.js -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
+    <!-- GSAP + ScrollTrigger -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+    <!-- Lenis Smooth Scroll -->
+    <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
 
-        .glass {
-            background: rgba(15, 23, 42, 0.7);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .gradient-text {
-            background: linear-gradient(135deg, #0ea5e9, #8b5cf6);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        [x-cloak] {
-            display: none !important;
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #020617;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #334155;
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #475569;
-        }
-
-        .blob {
-            position: absolute;
-            filter: blur(80px);
-            z-index: 0;
-            opacity: 0.3;
-            animation: pulse-blob 10s infinite alternate;
-        }
-
-        @keyframes pulse-blob {
-            0% {
-                transform: scale(1) translate(0, 0);
-            }
-
-            100% {
-                transform: scale(1.1) translate(20px, -20px);
-            }
-        }
-    </style>
+    <!-- Application Styles -->
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 
 <body class="bg-darker text-slate-300 antialiased relative overflow-x-hidden selection:bg-primary selection:text-white"
     x-data="{ scrolled: false }" @scroll.window="scrolled = (window.pageYOffset > 20)">
 
-    <!-- Background Blobs for Aesthetics -->
-    <div class="blob bg-primary/30 w-96 h-96 rounded-full top-0 left-[-100px]"></div>
-    <div class="blob bg-secondary/20 w-[600px] h-[600px] rounded-full bottom-0 right-[-100px] opacity-20"></div>
+    <!-- Loading Screen (auto-dismiss fallback via JS timeout) -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-spinner"></div>
+        <div class="loading-counter" id="loadingCounter">0</div>
+        <div class="loading-label">Loading Experience</div>
+    </div>
+    <script>
+        // Fallback: force-dismiss loading screen after 3s no matter what
+        setTimeout(function () {
+            var ls = document.getElementById('loadingScreen');
+            if (ls && !ls.classList.contains('done')) {
+                ls.classList.add('done');
+                setTimeout(function () { ls.style.display = 'none'; }, 700);
+            }
+        }, 3000);
+    </script>
 
-    <!-- Navigation -->
+
+    <!-- Noise Overlay -->
+    <div class="noise-overlay"></div>
+
+    <!-- Scroll Progress Bar -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <!-- ============================================================ -->
+    <!-- NAVIGATION                                                    -->
+    <!-- ============================================================ -->
     <nav :class="{'glass': scrolled, 'bg-transparent py-6': !scrolled}"
-        class="fixed w-full z-50 transition-all duration-300 py-4">
+        class="fixed w-full z-50 transition-all duration-300 py-4" x-data="{ mobileOpen: false }">
         <div class="max-w-6xl mx-auto px-6 flex justify-between items-center relative z-10">
-            <a href="#" class="text-2xl font-bold tracking-tighter text-white">IT<span
+            <a href="#" class="text-2xl font-heading font-extrabold tracking-tighter text-white">IT<span
                     class="text-primary">Resume</span>.</a>
-            <div class="hidden md:flex space-x-8 text-sm font-medium">
-                <a href="#about" class="hover:text-primary transition-colors">About</a>
-                <a href="#experience" class="hover:text-primary transition-colors">Experience</a>
-                <a href="#skills" class="hover:text-primary transition-colors">Skills</a>
-                <a href="#contact" class="hover:text-primary transition-colors">Contact</a>
+            <div class="hidden md:flex space-x-8 text-sm font-medium items-center">
+                <a href="#about" class="nav-link hover:text-primary transition-colors" data-section="about">About</a>
+                <a href="#experience" class="nav-link hover:text-primary transition-colors"
+                    data-section="experience">Experience</a>
+                <a href="#skills" class="nav-link hover:text-primary transition-colors" data-section="skills">Skills</a>
+                <a href="#portfolio" class="nav-link hover:text-primary transition-colors"
+                    data-section="portfolio">Portfolio</a>
+                <button onclick="window.print()"
+                    class="ml-2 px-4 py-1.5 rounded-lg bg-primary/15 text-primary border border-primary/25 hover:bg-primary/25 transition-all text-xs font-mono uppercase tracking-wider flex items-center gap-1.5">
+                    <i data-lucide="printer" class="w-3.5 h-3.5"></i> Resume
+                </button>
             </div>
-            <button class="md:hidden text-white hover:text-primary transition-colors"><i
-                    data-lucide="menu"></i></button>
+            <button class="md:hidden text-white hover:text-primary transition-colors" @click="mobileOpen = !mobileOpen">
+                <i :data-lucide="mobileOpen ? 'x' : 'menu'" x-effect="$nextTick(() => lucide.createIcons())"></i>
+            </button>
+        </div>
+        <!-- Mobile Menu -->
+        <div x-show="mobileOpen" x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 -translate-y-4" x-transition:enter-end="opacity-100 translate-y-0"
+            x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0"
+            x-transition:leave-end="opacity-0 -translate-y-4"
+            class="md:hidden glass mt-2 mx-4 rounded-2xl border border-slate-800/50 overflow-hidden" x-cloak>
+            <div class="flex flex-col px-6 py-4 space-y-1">
+                <a href="#about" @click="mobileOpen = false"
+                    class="py-3 text-slate-300 hover:text-primary transition-colors font-medium border-b border-slate-800/50">About</a>
+                <a href="#experience" @click="mobileOpen = false"
+                    class="py-3 text-slate-300 hover:text-primary transition-colors font-medium border-b border-slate-800/50">Experience</a>
+                <a href="#skills" @click="mobileOpen = false"
+                    class="py-3 text-slate-300 hover:text-primary transition-colors font-medium border-b border-slate-800/50">Skills</a>
+                <a href="#portfolio" @click="mobileOpen = false"
+                    class="py-3 text-slate-300 hover:text-primary transition-colors font-medium border-b border-slate-800/50">Portfolio</a>
+                <button onclick="window.print(); this.closest('[x-data]').__x.$data.mobileOpen = false;"
+                    class="py-3 text-primary hover:text-sky-300 transition-colors font-medium text-left flex items-center gap-2">
+                    <i data-lucide="printer" class="w-4 h-4"></i> Print Resume
+                </button>
+            </div>
         </div>
     </nav>
 
     <main class="relative z-10">
-        <!-- Hero Section -->
+
+        <!-- ============================================================ -->
+        <!-- HERO SECTION                                                  -->
+        <!-- ============================================================ -->
         <section class="min-h-screen flex items-center justify-center pt-20 px-6 relative">
             <div class="max-w-4xl mx-auto text-center relative z-10">
-                <div class="inline-flex items-center justify-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-slate-700/50 bg-slate-800/40 backdrop-blur-sm text-sm text-slate-300 font-mono shadow-lg"
-                    x-data="{ text: '$ whoami' }">
-                    <span class="text-primary">~</span> <span x-text="text"></span>
+
+                <!-- Profile Picture -->
+                <div class="mb-6 gsap-reveal" data-animate="hero">
+                    <div class="relative inline-block group">
+                        <div
+                            class="absolute -inset-1 bg-gradient-to-r from-primary via-secondary to-primary rounded-full blur-md opacity-50 group-hover:opacity-80 transition duration-500 animate-[spin_6s_linear_infinite]">
+                        </div>
+                        <div
+                            class="relative w-28 h-28 md:w-32 md:h-32 rounded-full border-2 border-slate-700 overflow-hidden bg-slate-800 shadow-2xl">
+                            <img src="images/profile.jpg" alt="Wiroad Bunsree" class="w-full h-full object-cover"
+                                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="w-full h-full items-center justify-center text-slate-500 hidden">
+                                <i data-lucide="user" class="w-12 h-12"></i>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <h1 class="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight">
+                <!-- Terminal Badge -->
+                <div class="inline-flex items-center justify-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-slate-700/50 bg-slate-800/40 backdrop-blur-sm text-sm text-slate-300 font-mono shadow-lg gsap-reveal"
+                    data-animate="hero">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span id="typewriterText"></span><span class="typewriter-cursor"></span>
+                </div>
+
+                <h1 class="text-5xl md:text-8xl font-heading font-extrabold text-white mb-6 tracking-tighter leading-[0.9] gsap-reveal"
+                    data-animate="hero">
                     Hi, I'm <br class="md:hidden" /> <span class="gradient-text">Wiroad Bunsree <br
                             class="hidden md:block" />(Nap)</span>
                 </h1>
 
-                <p class="text-xl md:text-2xl text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed">
+                <p class="text-xl md:text-2xl text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed gsap-reveal"
+                    data-animate="hero">
                     A 27-year-old <span class="text-white font-medium">IT Professional & Developer</span> specializing
                     in web applications and Windows Server infrastructure.
                 </p>
 
-                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                    <a href="#contact"
-                        class="px-8 py-3.5 rounded-lg bg-primary hover:bg-sky-400 text-white font-medium transition-all transform hover:-translate-y-1 shadow-[0_0_20px_rgba(14,165,233,0.3)] hover:shadow-[0_0_25px_rgba(14,165,233,0.5)] flex items-center gap-2">
-                        <i data-lucide="mail" class="w-5 h-5"></i>
-                        Contact Me
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 gsap-reveal"
+                    data-animate="hero">
+                    <a href="#portfolio"
+                        class="magnetic-btn px-8 py-3.5 rounded-lg bg-primary hover:bg-sky-400 text-white font-medium transition-all transform hover:-translate-y-1 shadow-[0_0_20px_rgba(14,165,233,0.3)] hover:shadow-[0_0_25px_rgba(14,165,233,0.5)] flex items-center gap-2">
+                        <i data-lucide="briefcase-business" class="w-5 h-5"></i>
+                        View Portfolio
                     </a>
                     <a href="#experience"
-                        class="px-8 py-3.5 rounded-lg border border-slate-700 hover:border-slate-500 bg-slate-800/50 hover:bg-slate-800 text-white font-medium transition-all flex items-center gap-2 group">
+                        class="magnetic-btn px-8 py-3.5 rounded-lg border border-slate-700 hover:border-slate-500 bg-slate-800/50 hover:bg-slate-800 text-white font-medium transition-all flex items-center gap-2 group">
                         <i data-lucide="code" class="w-5 h-5 group-hover:text-primary transition-colors"></i>
                         View Experience
                     </a>
                 </div>
 
-                <div class="mt-16 flex justify-center gap-8 text-slate-500">
-                    <a href="#" class="hover:text-white hover:-translate-y-1 transition-all"><i data-lucide="github"
-                            class="w-7 h-7"></i></a>
-                    <a href="#" class="hover:text-[#0a66c2] hover:-translate-y-1 transition-all"><i
-                            data-lucide="linkedin" class="w-7 h-7"></i></a>
-                    <a href="#" class="hover:text-primary hover:-translate-y-1 transition-all"><i data-lucide="globe"
-                            class="w-7 h-7"></i></a>
+                <div class="mt-16 flex justify-center gap-8 text-slate-500 gsap-reveal" data-animate="hero">
+                    <a href="https://mail.google.com/mail/?view=cm&to=vvww29@gmail.com" target="_blank"
+                        rel="noopener noreferrer" class="hover:text-white hover:-translate-y-1 transition-all">
+                        <i data-lucide="mail" class="w-7 h-7"></i>
+                    </a>
+                    <a href="https://t.me/naptun3" target="_blank" rel="noopener noreferrer"
+                        class="hover:text-[#26A5E4] hover:-translate-y-1 transition-all">
+                        <i data-lucide="send" class="w-7 h-7"></i>
+                    </a>
+                    <a href="javascript:void(0)" onclick="document.getElementById('wechatModal').classList.add('open')"
+                        class="hover:text-[#07C160] hover:-translate-y-1 transition-all">
+                        <i data-lucide="message-circle" class="w-7 h-7"></i>
+                    </a>
+                </div>
+
+                <!-- Scroll Down Indicator -->
+                <div class="absolute -bottom-24 left-1/2 -translate-x-1/2 scroll-indicator gsap-reveal"
+                    data-animate="hero">
+                    <a href="#about"
+                        class="flex flex-col items-center gap-2 text-slate-500 hover:text-primary transition-colors">
+                        <span class="text-xs font-mono uppercase tracking-widest">Scroll</span>
+                        <i data-lucide="chevrons-down" class="w-5 h-5"></i>
+                    </a>
                 </div>
             </div>
         </section>
 
-        <!-- About Details Grid -->
+        <div class="section-line max-w-4xl mx-auto"></div>
+
+        <!-- ============================================================ -->
+        <!-- ABOUT SECTION                                                 -->
+        <!-- ============================================================ -->
         <section id="about" class="py-24 px-6 max-w-6xl mx-auto">
             <div class="grid md:grid-cols-2 gap-12 items-center">
-                <div class="space-y-6">
+                <div class="space-y-6 gsap-reveal" data-animate="about-left">
                     <div class="flex items-center gap-4">
-                        <h2 class="text-3xl font-bold text-white">About Me</h2>
+                        <h2 class="text-3xl font-heading font-extrabold text-white tracking-tight">About Me</h2>
                         <div class="h-px bg-slate-800 flex-1"></div>
                     </div>
                     <p class="text-slate-400 leading-relaxed text-lg">
-                        I am a 27-year-old versatile IT professional and developer with expertise in both Windows Server
-                        administration and web development. I thrive in challenging environments where I can leverage my
-                        problem-solving skills to build efficient web applications and maintain robust server
-                        infrastructures.
+                        I'm a 27-year-old developer who goes by <span class="text-white font-medium">NAP</span>, with
+                        2 years of hands-on IT experience. My work spans <span class="text-white font-medium">web
+                            applications</span>, <span class="text-white font-medium">desktop programs</span>,
+                        <span class="text-white font-medium">API integrations</span>, and publishing apps to the
+                        <span class="text-white font-medium">Google Play Store</span>.
+                        Beyond development, I also manage <span class="text-white font-medium">Windows Servers</span>
+                        to ensure continuous uptime, as well as the <span class="text-white font-medium">internal
+                            network infrastructure</span> across the factory.
                     </p>
 
                     <div class="mt-6 space-y-3">
@@ -183,84 +236,120 @@
                         <div class="flex items-center gap-4">
                             <span class="text-slate-400 w-24">Thai</span>
                             <div class="flex-1 bg-slate-800/50 rounded-full h-1.5 overflow-hidden">
-                                <div class="bg-primary h-1.5 rounded-full" style="width: 100%"></div>
+                                <div class="bg-primary h-1.5 rounded-full lang-bar" data-width="100"></div>
                             </div>
                             <span class="text-xs font-mono text-primary w-20 text-right">Excellent</span>
                         </div>
                         <div class="flex items-center gap-4">
                             <span class="text-slate-400 w-24">English</span>
                             <div class="flex-1 bg-slate-800/50 rounded-full h-1.5 overflow-hidden">
-                                <div class="bg-secondary h-1.5 rounded-full" style="width: 65%"></div>
+                                <div class="bg-secondary h-1.5 rounded-full lang-bar" data-width="65"></div>
                             </div>
                             <span class="text-xs font-mono text-secondary w-20 text-right">Read/Write</span>
                         </div>
                         <div class="flex items-center gap-4">
                             <span class="text-slate-400 w-24">Chinese</span>
                             <div class="flex-1 bg-slate-800/50 rounded-full h-1.5 overflow-hidden">
-                                <div class="bg-emerald-400 h-1.5 rounded-full" style="width: 40%"></div>
+                                <div class="bg-emerald-400 h-1.5 rounded-full lang-bar" data-width="40"></div>
                             </div>
                             <span class="text-xs font-mono text-emerald-400 w-20 text-right">Fair</span>
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-6 pt-6 border-t border-slate-800/60">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 pt-6 border-t border-slate-800/60">
                         <div>
                             <span
                                 class="block text-sm text-slate-500 mb-1 font-mono uppercase tracking-wider">Location</span>
                             <span class="text-white font-medium flex items-center gap-2"><i data-lucide="map-pin"
-                                    class="w-4 h-4 text-primary"></i> Bangkok, Thailand</span>
+                                    class="w-4 h-4 text-primary"></i> Rayong, Thailand</span>
                         </div>
                         <div>
                             <span
                                 class="block text-sm text-slate-500 mb-1 font-mono uppercase tracking-wider">Email</span>
                             <span class="text-white font-medium flex items-center gap-2"><i data-lucide="at-sign"
-                                    class="w-4 h-4 text-primary"></i> hello@example.com</span>
+                                    class="w-4 h-4 text-primary"></i> vvww29@gmail.com</span>
+                        </div>
+                        <div>
+                            <span
+                                class="block text-sm text-slate-500 mb-1 font-mono uppercase tracking-wider">Phone</span>
+                            <span class="text-white font-medium flex items-center gap-2"><i data-lucide="phone"
+                                    class="w-4 h-4 text-primary"></i> +66-85-883-2369</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="relative group">
+                <div class="relative group tilt-card gsap-reveal" data-animate="about-right" id="skillFocusCard">
                     <div
                         class="absolute -inset-1 bg-gradient-to-r from-primary to-secondary rounded-2xl blur opacity-25 group-hover:opacity-40 transition duration-1000 group-hover:duration-200">
                     </div>
-                    <div class="relative bg-dark rounded-2xl border border-slate-800 p-8 shadow-2xl">
+                    <div class="relative bg-dark rounded-2xl border border-slate-800 p-8 shadow-2xl tilt-card-inner">
                         <div class="flex items-center justify-between mb-8">
-                            <h3 class="text-xl font-bold text-white">Skill Focus</h3>
-                            <i data-lucide="activity" class="text-primary w-6 h-6 animate-pulse"></i>
+                            <h3 class="text-xl font-heading font-bold text-white">Skill Focus</h3>
+                            <i data-lucide="layers" class="text-primary w-6 h-6"></i>
                         </div>
                         <div class="space-y-6">
                             <div>
-                                <div class="flex justify-between mb-2">
-                                    <span class="text-slate-300 font-medium">Web Dev (PHP, C#, VB.NET)</span>
-                                    <span class="text-primary font-mono text-sm">90%</span>
+                                <div class="flex items-center gap-2 mb-3">
+                                    <span class="w-2 h-2 rounded-full bg-primary"></span>
+                                    <span
+                                        class="text-xs font-mono uppercase tracking-widest text-primary">Development</span>
                                 </div>
-                                <div class="w-full bg-slate-800/50 rounded-full h-1.5 overflow-hidden">
-                                    <div class="bg-gradient-to-r from-primary to-blue-500 h-1.5 rounded-full relative"
-                                        style="width: 90%">
-                                        <div
-                                            class="absolute inset-0 bg-white/20 w-full h-full animate-[shimmer_2s_infinite]">
-                                        </div>
-                                    </div>
+                                <div class="flex flex-wrap gap-2">
+                                    <span
+                                        class="px-3 py-1.5 text-xs font-medium rounded-lg bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-colors cursor-default">PHP</span>
+                                    <span
+                                        class="px-3 py-1.5 text-xs font-medium rounded-lg bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-colors cursor-default">C#</span>
+                                    <span
+                                        class="px-3 py-1.5 text-xs font-medium rounded-lg bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-colors cursor-default">VB.NET</span>
+                                    <span
+                                        class="px-3 py-1.5 text-xs font-medium rounded-lg bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-colors cursor-default">VB6</span>
+                                    <span
+                                        class="px-3 py-1.5 text-xs font-medium rounded-lg bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-colors cursor-default">HTML
+                                        / CSS / JS</span>
+                                    <span
+                                        class="px-3 py-1.5 text-xs font-medium rounded-lg bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-colors cursor-default">REST
+                                        API</span>
                                 </div>
                             </div>
                             <div>
-                                <div class="flex justify-between mb-2">
-                                    <span class="text-slate-300 font-medium">Windows Server & AD / IIS</span>
-                                    <span class="text-secondary font-mono text-sm">85%</span>
+                                <div class="flex items-center gap-2 mb-3">
+                                    <span class="w-2 h-2 rounded-full bg-secondary"></span>
+                                    <span
+                                        class="text-xs font-mono uppercase tracking-widest text-secondary">Infrastructure</span>
                                 </div>
-                                <div class="w-full bg-slate-800/50 rounded-full h-1.5 overflow-hidden">
-                                    <div class="bg-gradient-to-r from-secondary to-purple-500 h-1.5 rounded-full"
-                                        style="width: 85%"></div>
+                                <div class="flex flex-wrap gap-2">
+                                    <span
+                                        class="px-3 py-1.5 text-xs font-medium rounded-lg bg-secondary/10 text-secondary border border-secondary/20 hover:bg-secondary/20 transition-colors cursor-default">Windows
+                                        Server</span>
+                                    <span
+                                        class="px-3 py-1.5 text-xs font-medium rounded-lg bg-secondary/10 text-secondary border border-secondary/20 hover:bg-secondary/20 transition-colors cursor-default">Active
+                                        Directory</span>
+                                    <span
+                                        class="px-3 py-1.5 text-xs font-medium rounded-lg bg-secondary/10 text-secondary border border-secondary/20 hover:bg-secondary/20 transition-colors cursor-default">IIS</span>
+                                    <span
+                                        class="px-3 py-1.5 text-xs font-medium rounded-lg bg-secondary/10 text-secondary border border-secondary/20 hover:bg-secondary/20 transition-colors cursor-default">Networking
+                                        / LAN</span>
                                 </div>
                             </div>
                             <div>
-                                <div class="flex justify-between mb-2">
-                                    <span class="text-slate-300 font-medium">Database (MySQL)</span>
-                                    <span class="text-emerald-400 font-mono text-sm">80%</span>
+                                <div class="flex items-center gap-2 mb-3">
+                                    <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                                    <span class="text-xs font-mono uppercase tracking-widest text-emerald-400">Database
+                                        & Tools</span>
                                 </div>
-                                <div class="w-full bg-slate-800/50 rounded-full h-1.5 overflow-hidden">
-                                    <div class="bg-gradient-to-r from-emerald-400 to-teal-500 h-1.5 rounded-full"
-                                        style="width: 80%"></div>
+                                <div class="flex flex-wrap gap-2">
+                                    <span
+                                        class="px-3 py-1.5 text-xs font-medium rounded-lg bg-emerald-400/10 text-emerald-400 border border-emerald-400/20 hover:bg-emerald-400/20 transition-colors cursor-default">MariaDB
+                                        / MySQL</span>
+                                    <span
+                                        class="px-3 py-1.5 text-xs font-medium rounded-lg bg-emerald-400/10 text-emerald-400 border border-emerald-400/20 hover:bg-emerald-400/20 transition-colors cursor-default">MS
+                                        Access</span>
+                                    <span
+                                        class="px-3 py-1.5 text-xs font-medium rounded-lg bg-emerald-400/10 text-emerald-400 border border-emerald-400/20 hover:bg-emerald-400/20 transition-colors cursor-default">AI
+                                        Agentic</span>
+                                    <span
+                                        class="px-3 py-1.5 text-xs font-medium rounded-lg bg-emerald-400/10 text-emerald-400 border border-emerald-400/20 hover:bg-emerald-400/20 transition-colors cursor-default">VM
+                                        & Virtualization</span>
                                 </div>
                             </div>
                         </div>
@@ -269,111 +358,165 @@
             </div>
         </section>
 
-        <!-- Experience Timeline -->
+        <div class="section-line max-w-4xl mx-auto"></div>
+
+        <!-- ============================================================ -->
+        <!-- EXPERIENCE TIMELINE                                           -->
+        <!-- ============================================================ -->
         <section id="experience" class="py-24 px-6 max-w-4xl mx-auto">
-            <div class="flex items-center gap-4 mb-16">
-                <h2 class="text-3xl font-bold text-white">Experience</h2>
+            <div class="flex items-center gap-4 mb-16 gsap-reveal" data-animate="experience">
+                <h2 class="text-3xl font-heading font-extrabold text-white tracking-tight">Experience</h2>
                 <div class="h-px bg-slate-800 flex-1"></div>
             </div>
 
             <div
                 class="space-y-12 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-700 before:to-transparent">
 
-                <!-- Timeline Item 1 -->
-                <div
-                    class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group md:gap-10">
+                <!-- Timeline Item 1 — Education -->
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group md:gap-10 gsap-reveal"
+                    data-animate="timeline">
                     <div
                         class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-darker bg-slate-800 text-primary shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 transition-colors group-hover:bg-primary group-hover:text-white">
-                        <i data-lucide="briefcase" class="w-4 h-4"></i>
+                        <i data-lucide="graduation-cap" class="w-4 h-4"></i>
                     </div>
-
                     <div
-                        class="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] bg-slate-900/80 border border-slate-800/80 p-6 rounded-2xl hover:border-primary/30 transition-all duration-300 shadow-lg hover:shadow-primary/5 hover:-translate-y-1">
-                        <div class="flex items-center justify-between mb-2">
-                            <h3 class="font-bold text-white text-xl">Senior Software Engineer</h3>
-                        </div>
+                        class="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] bg-slate-900/80 border border-slate-800/80 p-6 rounded-2xl hover:border-primary/30 transition-all duration-300 shadow-lg hover:shadow-primary/5 hover:-translate-y-1 glow-card">
+                        <h3 class="font-heading font-bold text-white text-xl mb-2">Bachelor of Science</h3>
                         <div
-                            class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary font-mono text-xs mb-4">
-                            <span>Tech Corp Inc.</span>
-                            <span class="w-1 h-1 rounded-full bg-primary/50"></span>
-                            <span>2023 - Present</span>
+                            class="inline-flex flex-wrap md:flex-nowrap items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary font-mono text-xs mb-4">
+                            <span class="whitespace-nowrap">Chiang Rai Rajabhat University</span>
+                            <span class="hidden md:inline-block w-1 h-1 rounded-full bg-primary/50"></span>
+                            <span class="whitespace-nowrap">2019 - 2023</span>
                         </div>
                         <p class="text-slate-400 text-sm leading-relaxed mb-4">
-                            Led the development of microservices architecture using Go and Node.js. Improved system
-                            performance by 40% and implemented robust CI/CD pipelines deploying to Kubernetes clusters.
+                            <strong class="text-slate-200 font-medium">Major:</strong> Information Technology<br>
+                            <strong class="text-slate-200 font-medium">Graduation Date:</strong> March 21, 2023<br>
+                            <strong class="text-slate-200 font-medium">GPA:</strong> 2.65
                         </p>
                         <div class="flex flex-wrap gap-2">
-                            <span class="text-xs font-medium px-2 py-1 bg-slate-800 text-slate-300 rounded-md">Go</span>
-                            <span
-                                class="text-xs font-medium px-2 py-1 bg-slate-800 text-slate-300 rounded-md">Node.js</span>
-                            <span
-                                class="text-xs font-medium px-2 py-1 bg-slate-800 text-slate-300 rounded-md">Kubernetes</span>
+                            <span class="text-xs font-medium px-2 py-1 bg-slate-800 text-slate-300 rounded-md">IT
+                                Infrastructure</span>
+                            <span class="text-xs font-medium px-2 py-1 bg-slate-800 text-slate-300 rounded-md">Software
+                                Development</span>
+                            <span class="text-xs font-medium px-2 py-1 bg-slate-800 text-slate-300 rounded-md">Database
+                                Systems</span>
+                            <span class="text-xs font-medium px-2 py-1 bg-slate-800 text-slate-300 rounded-md">UX/UI
+                                Design</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Timeline Item 2 -->
-                <div
-                    class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group md:gap-10">
+                <!-- Timeline Item 2 — Intern -->
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group md:gap-10 gsap-reveal"
+                    data-animate="timeline">
                     <div
                         class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-darker bg-slate-800 text-secondary shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 transition-colors group-hover:bg-secondary group-hover:text-white">
-                        <i data-lucide="terminal" class="w-4 h-4"></i>
+                        <i data-lucide="cctv" class="w-4 h-4"></i>
                     </div>
-
                     <div
-                        class="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] bg-slate-900/80 border border-slate-800/80 p-6 rounded-2xl hover:border-secondary/30 transition-all duration-300 shadow-lg hover:shadow-secondary/5 hover:-translate-y-1">
-                        <div class="flex items-center justify-between mb-2">
-                            <h3 class="font-bold text-white text-xl">Full Stack Developer</h3>
-                        </div>
+                        class="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] bg-slate-900/80 border border-slate-800/80 p-6 rounded-2xl hover:border-secondary/30 transition-all duration-300 shadow-lg hover:shadow-secondary/5 hover:-translate-y-1 glow-card">
+                        <h3 class="font-heading font-bold text-white text-xl mb-2">IT Intern / Trainee</h3>
                         <div
-                            class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/10 text-secondary font-mono text-xs mb-4">
-                            <span>Startup.io</span>
-                            <span class="w-1 h-1 rounded-full bg-secondary/50"></span>
-                            <span>2021 - 2023</span>
+                            class="inline-flex flex-col md:flex-row items-start md:items-center gap-2 px-4 py-2 rounded-xl border border-secondary/20 bg-secondary/10 text-secondary font-mono text-xs mb-4">
+                            <span class="leading-relaxed">I.T.SYSTEMS CO., LTD. <br> & Mango Consultant</span>
+                            <span class="hidden md:inline-block w-1 h-1 rounded-full bg-secondary/50"></span>
+                            <span class="whitespace-nowrap bg-secondary/20 px-2 py-0.5 rounded-md">2023 - 2024</span>
                         </div>
-                        <p class="text-slate-400 text-sm leading-relaxed mb-4">
-                            Developed and maintained highly responsive web applications. Built scalable REST APIs,
-                            integrated third-party payment gateways, and optimized complex database workloads.
-                        </p>
+                        <ul class="text-slate-400 text-sm leading-relaxed mb-4 list-disc list-inside space-y-1">
+                            <li>Set up and configured CCTV Network systems at <span
+                                    class="text-slate-300 font-medium">I.T. SYSTEMS COMPANY LIMITED</span>.</li>
+                            <li>Designed Web Application UX/UI and user flows at <span
+                                    class="text-slate-300 font-medium">Mango Consultant</span>.</li>
+                            <li>Developed reporting modules for the <span class="text-slate-300 font-medium">ERP
+                                    system</span> at <span class="text-slate-300 font-medium">Mango Consultant</span>.
+                            </li>
+                        </ul>
                         <div class="flex flex-wrap gap-2">
-                            <span
-                                class="text-xs font-medium px-2 py-1 bg-slate-800 text-slate-300 rounded-md">React</span>
-                            <span
-                                class="text-xs font-medium px-2 py-1 bg-slate-800 text-slate-300 rounded-md">Laravel</span>
-                            <span
-                                class="text-xs font-medium px-2 py-1 bg-slate-800 text-slate-300 rounded-md">PostgreSQL</span>
+                            <span class="text-xs font-medium px-2 py-1 bg-slate-800 text-slate-300 rounded-md">CCTV
+                                Systems</span>
+                            <span class="text-xs font-medium px-2 py-1 bg-slate-800 text-slate-300 rounded-md">UX/UI
+                                Design</span>
+                            <span class="text-xs font-medium px-2 py-1 bg-slate-800 text-slate-300 rounded-md">Web
+                                Apps</span>
                         </div>
                     </div>
                 </div>
 
+                <!-- Timeline Item 3 — Programmer -->
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group md:gap-10 gsap-reveal"
+                    data-animate="timeline">
+                    <div
+                        class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-darker bg-slate-800 text-emerald-400 shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 transition-colors group-hover:bg-emerald-400 group-hover:text-white">
+                        <i data-lucide="code" class="w-4 h-4"></i>
+                    </div>
+                    <div
+                        class="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] bg-slate-900/80 border border-slate-800/80 p-6 rounded-2xl hover:border-emerald-400/30 transition-all duration-300 shadow-lg hover:shadow-emerald-400/5 hover:-translate-y-1 glow-card">
+                        <h3 class="font-heading font-bold text-white text-xl mb-2">IT Programmer</h3>
+                        <div
+                            class="inline-flex flex-col md:flex-row items-start md:items-center gap-2 px-4 py-2 rounded-xl border border-emerald-400/20 bg-emerald-400/10 text-emerald-400 font-mono text-xs mb-4">
+                            <span class="leading-relaxed">THAI PAPPER MILL CO., LTD.</span>
+                            <span class="hidden md:inline-block w-1 h-1 rounded-full bg-emerald-400/50"></span>
+                            <span class="whitespace-nowrap bg-emerald-400/20 px-2 py-0.5 rounded-md">2024 - 2026</span>
+                        </div>
+                        <ul class="text-slate-400 text-sm leading-relaxed mb-4 list-disc list-inside space-y-1">
+                            <li>Developed cross-platform <span class="text-slate-300 font-medium">web
+                                    applications</span>, <span class="text-slate-300 font-medium">desktop
+                                    programs</span>, and <span class="text-slate-300 font-medium">Android mobile
+                                    applications</span> as assigned by the organization.</li>
+                            <li>Managed and maintained <span class="text-slate-300 font-medium">network
+                                    infrastructure</span>, including switch configuration and factory-wide LAN
+                                administration.</li>
+                            <li>Administered <span class="text-slate-300 font-medium">web servers</span> and <span
+                                    class="text-slate-300 font-medium">Active Directory servers</span>, ensuring
+                                seamless uptime and continuous operations.</li>
+                        </ul>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs font-medium px-2 py-1 bg-slate-800 text-slate-300 rounded-md">Web
+                                Development</span>
+                            <span class="text-xs font-medium px-2 py-1 bg-slate-800 text-slate-300 rounded-md">Desktop
+                                Apps</span>
+                            <span
+                                class="text-xs font-medium px-2 py-1 bg-slate-800 text-slate-300 rounded-md">Android</span>
+                            <span
+                                class="text-xs font-medium px-2 py-1 bg-slate-800 text-slate-300 rounded-md">Networking</span>
+                            <span class="text-xs font-medium px-2 py-1 bg-slate-800 text-slate-300 rounded-md">Server
+                                Admin</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <!-- Technical Skills -->
+        <div class="section-line max-w-4xl mx-auto"></div>
+
+        <!-- ============================================================ -->
+        <!-- TECHNICAL SKILLS                                              -->
+        <!-- ============================================================ -->
         <section id="skills" class="py-24 px-6 max-w-6xl mx-auto">
-            <div class="flex items-center gap-4 mb-16">
+            <div class="flex items-center gap-4 mb-16 gsap-reveal" data-animate="skills">
                 <div class="h-px bg-slate-800 flex-1"></div>
-                <h2 class="text-3xl font-bold text-white uppercase tracking-widest text-sm">Technical Arsenal</h2>
+                <h2 class="font-heading font-extrabold text-white uppercase tracking-widest text-sm">Technical Arsenal
+                </h2>
                 <div class="h-px bg-slate-800 flex-1"></div>
             </div>
 
             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4" x-data="{
                 skills: [
                     { name: 'PHP', icon: 'file-code', color: 'text-indigo-400' },
-                    { name: 'C#', icon: 'code-2', color: 'text-purple-500' },
-                    { name: 'VB.NET', icon: 'file-code-2', color: 'text-blue-400' },
-                    { name: 'MySQL', icon: 'database', color: 'text-orange-400' },
-                    { name: 'Tailwind CSS', icon: 'wind', color: 'text-sky-400' },
-                    { name: 'Bootstrap', icon: 'layout', color: 'text-purple-400' },
-                    { name: 'Windows Server', icon: 'server', color: 'text-blue-500' },
-                    { name: 'Active Directory', icon: 'users', color: 'text-blue-300' },
-                    { name: 'IIS', icon: 'globe', color: 'text-cyan-400' },
-                    { name: 'VM', icon: 'box', color: 'text-slate-300' }
+                    { name: 'C#', icon: 'hash', color: 'text-purple-500' },
+                    { name: 'VB.NET/VB6', icon: 'monitor', color: 'text-blue-400' },
+                    { name: 'MariaDB/MySQL', icon: 'database', color: 'text-emerald-500' },
+                    { name: 'Microsoft Access', icon: 'table-2', color: 'text-sky-500' },
+                    { name: 'Windows Server', icon: 'server', color: 'text-blue-600' },
+                    { name: 'Active Directory', icon: 'shield-check', color: 'text-indigo-500' },
+                    { name: 'VM & Infrastructure', icon: 'cpu', color: 'text-slate-400' },
+                    { name: 'AI Agentic', icon: 'bot', color: 'text-emerald-400' },
+                    { name: 'API & Webhooks', icon: 'webhook', color: 'text-fuchsia-400' },
                 ]
-            }">
+            }" x-init="$nextTick(() => lucide.createIcons())">
                 <template x-for="(skill, index) in skills" :key="skill.name">
-                    <div
-                        class="group relative p-0.5 rounded-xl overflow-hidden cursor-default transition-all duration-300 hover:-translate-y-2">
+                    <div class="skill-card group relative p-0.5 rounded-xl overflow-hidden cursor-default transition-all duration-300 hover:-translate-y-2 gsap-reveal"
+                        data-animate="skill-card">
                         <div
                             class="absolute inset-0 bg-gradient-to-br from-slate-800 to-slate-900 group-hover:from-primary/50 group-hover:to-secondary/50 transition-colors duration-300 opacity-50">
                         </div>
@@ -390,38 +533,653 @@
             </div>
         </section>
 
-        <!-- Call to Action / Contact -->
-        <section id="contact" class="py-32 px-6 text-center relative">
-            <div
-                class="absolute inset-0 bg-primary/5 flex items-center justify-center blur-3xl rounded-full translate-y-20 z-0">
+        <div class="section-line max-w-4xl mx-auto"></div>
+
+        <!-- ============================================================ -->
+        <!-- PORTFOLIO                                                     -->
+        <!-- ============================================================ -->
+        <section id="portfolio" class="py-24 px-6 max-w-6xl mx-auto" x-data="portfolioApp()" x-init="init()">
+            <div class="flex items-center gap-4 mb-12 gsap-reveal" data-animate="portfolio-header">
+                <h2 class="text-3xl font-heading font-extrabold text-white tracking-tight">Portfolio</h2>
+                <div class="h-px bg-slate-800 flex-1"></div>
             </div>
-            <div class="relative z-10">
-                <h2 class="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tight">Let's build something <span
-                        class="gradient-text">amazing</span>.</h2>
-                <p class="text-slate-400 mb-10 max-w-lg mx-auto text-lg">
-                    Currently open for new opportunities. Whether you have a project in mind or just want to chat about
-                    tech, my inbox is always open.
-                </p>
-                <a href="mailto:hello@example.com"
-                    class="inline-flex items-center gap-2 px-10 py-4 rounded-xl bg-white text-darker font-bold hover:bg-slate-200 transition-all shadow-xl hover:shadow-white/20 hover:-translate-y-1">
-                    Say Hello <i data-lucide="send" class="w-5 h-5 ml-1"></i>
-                </a>
+
+            <!-- Filter Tabs -->
+            <div class="flex flex-wrap justify-center gap-3 mb-14 gsap-reveal" data-animate="portfolio-header">
+                <template x-for="tab in tabs" :key="tab">
+                    <button class="portfolio-filter-btn" :class="{ 'active': activeTab === tab }"
+                        @click="filterProjects(tab)" x-text="tab"></button>
+                </template>
+            </div>
+
+            <!-- Project Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <template x-for="(project, idx) in filteredProjects" :key="project.id">
+                    <div class="portfolio-card" data-animate="portfolio-card" @click="openModal(project)"
+                        :style="`transition-delay: ${idx * 80}ms`">
+                        <!-- Image -->
+                        <div class="relative overflow-hidden">
+                            <img :src="project.image" :alt="project.title" class="portfolio-card-img"
+                                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="w-full h-[220px] items-center justify-center bg-slate-800/50 hidden">
+                                <i data-lucide="image" class="w-12 h-12 text-slate-600"></i>
+                            </div>
+                            <div class="portfolio-card-gradient"></div>
+                            <!-- Hover Overlay -->
+                            <div class="portfolio-card-overlay">
+                                <p class="text-slate-300 text-sm mb-4 line-clamp-2" x-text="project.description"></p>
+                                <div class="portfolio-view-btn">
+                                    <i data-lucide="expand" class="w-4 h-4"></i>
+                                    View Details
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Card Content -->
+                        <div class="portfolio-card-content">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="portfolio-type-badge" :class="{
+                                          'badge-web': project.type === 'Web',
+                                          'badge-desktop': project.type === 'Desktop',
+                                          'badge-mobile': project.type === 'Mobile'
+                                      }">
+                                    <span x-text="project.typeIcon" class="text-sm"></span>
+                                    <span x-text="project.type"></span>
+                                </span>
+                                <span class="text-xs font-mono text-slate-500" x-text="project.year"></span>
+                            </div>
+                            <h3 class="font-heading font-bold text-white text-lg mb-2" x-text="project.title"></h3>
+                            <div class="flex flex-wrap gap-1.5">
+                                <template x-for="tech in project.tech.slice(0, 3)" :key="tech">
+                                    <span
+                                        class="text-[10px] font-mono px-2 py-0.5 rounded-md bg-slate-800/80 text-slate-400 border border-slate-700/50"
+                                        x-text="tech"></span>
+                                </template>
+                                <span x-show="project.tech.length > 3"
+                                    class="text-[10px] font-mono px-2 py-0.5 rounded-md bg-slate-800/80 text-slate-500"
+                                    x-text="'+' + (project.tech.length - 3)"></span>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <!-- Empty State -->
+            <div x-show="filteredProjects.length === 0" class="text-center py-20">
+                <i data-lucide="folder-open" class="w-12 h-12 text-slate-600 mx-auto mb-4"></i>
+                <p class="text-slate-500">No projects in this category yet.</p>
+            </div>
+
+            <!-- Modal Backdrop -->
+            <div class="portfolio-modal-backdrop" :class="{ 'open': modalOpen }" @click="closeModal()"></div>
+
+            <!-- Modal -->
+            <div class="portfolio-modal" :class="{ 'open': modalOpen }" @click.stop x-show="selectedProject">
+                <template x-if="selectedProject">
+                    <div>
+                        <!-- Modal Image -->
+                        <div class="relative">
+                            <img :src="selectedProject.image" :alt="selectedProject.title" class="portfolio-modal-img">
+                            <div class="absolute inset-0 bg-gradient-to-t from-dark via-transparent to-transparent">
+                            </div>
+                            <button @click="closeModal()"
+                                class="absolute top-4 right-4 w-10 h-10 rounded-full bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-800 transition-all z-10">
+                                <i data-lucide="x" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                        <!-- Modal Content -->
+                        <div class="p-8">
+                            <div class="flex flex-wrap items-center gap-3 mb-4">
+                                <span class="portfolio-type-badge" :class="{
+                                          'badge-web': selectedProject.type === 'Web',
+                                          'badge-desktop': selectedProject.type === 'Desktop',
+                                          'badge-mobile': selectedProject.type === 'Mobile'
+                                      }">
+                                    <span x-text="selectedProject.typeIcon" class="text-sm"></span>
+                                    <span x-text="selectedProject.type"></span>
+                                </span>
+                                <span class="text-xs font-mono text-slate-500" x-text="selectedProject.year"></span>
+                            </div>
+                            <h3 class="text-2xl md:text-3xl font-heading font-extrabold text-white mb-4 tracking-tight"
+                                x-text="selectedProject.title"></h3>
+                            <p class="text-slate-400 leading-relaxed mb-8" x-text="selectedProject.description"></p>
+
+                            <!-- Key Features -->
+                            <div class="mb-8">
+                                <h4
+                                    class="text-sm font-mono uppercase tracking-widest text-primary mb-4 flex items-center gap-2">
+                                    <i data-lucide="zap" class="w-4 h-4"></i> Key Features
+                                </h4>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                    <template x-for="feature in selectedProject.features" :key="feature">
+                                        <div
+                                            class="flex items-start gap-3 p-3 rounded-lg bg-slate-800/30 border border-slate-800/50">
+                                            <i data-lucide="check-circle-2"
+                                                class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0"></i>
+                                            <span class="text-sm text-slate-300" x-text="feature"></span>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+
+                            <!-- Tech Stack -->
+                            <div>
+                                <h4
+                                    class="text-sm font-mono uppercase tracking-widest text-secondary mb-4 flex items-center gap-2">
+                                    <i data-lucide="layers" class="w-4 h-4"></i> Tech Stack
+                                </h4>
+                                <div class="flex flex-wrap gap-2">
+                                    <template x-for="tech in selectedProject.tech" :key="tech">
+                                        <span
+                                            class="px-3 py-1.5 text-xs font-medium rounded-lg bg-slate-800/60 text-slate-300 border border-slate-700/50"
+                                            x-text="tech"></span>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
             </div>
         </section>
 
+        <div class="section-line max-w-4xl mx-auto"></div>
+
+        <!-- ============================================================ -->
+        <!-- CLOSING — FINAL WORDS                                         -->
+        <!-- ============================================================ -->
+        <section class="py-16 sm:py-32 px-6 text-center relative">
+            <div
+                class="absolute inset-0 bg-primary/5 flex items-center justify-center blur-3xl rounded-full translate-y-20 z-0">
+            </div>
+            <div class="relative z-10 max-w-3xl mx-auto">
+                <div class="inline-flex items-center justify-center gap-2 mb-8 px-4 py-1.5 rounded-full border border-slate-700/50 bg-slate-800/40 backdrop-blur-sm text-sm text-slate-300 font-mono shadow-lg gsap-reveal"
+                    data-animate="cta">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    Thank You for Watching
+                </div>
+
+                <h2 class="text-4xl md:text-6xl font-heading font-extrabold text-white mb-8 tracking-tighter gsap-reveal"
+                    data-animate="cta">Final <span class="gradient-text">Words</span></h2>
+
+                <p class="text-slate-400 mb-6 max-w-2xl mx-auto text-lg leading-relaxed gsap-reveal" data-animate="cta">
+                    Everything showcased here is a part of my professional work and hands-on experience.
+                    I am always eager to <span class="text-white font-medium">learn new things</span>,
+                    <span class="text-white font-medium">sharpen my skills</span>, and
+                    <span class="text-white font-medium">grow as a developer</span>.
+                </p>
+
+                <p class="text-slate-500 mb-12 max-w-xl mx-auto text-base leading-relaxed gsap-reveal"
+                    data-animate="cta">
+                    Thank you for taking the time to review my portfolio.
+                    I sincerely hope we get the opportunity to <span class="text-primary font-medium">work
+                        together</span>.
+                </p>
+
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 gsap-reveal" data-animate="cta">
+                    <a href="https://mail.google.com/mail/?view=cm&to=vvww29@gmail.com" target="_blank"
+                        rel="noopener noreferrer"
+                        class="magnetic-btn inline-flex items-center gap-2 px-10 py-4 rounded-xl bg-white text-darker font-bold hover:bg-slate-200 transition-all shadow-xl hover:shadow-white/20 hover:-translate-y-1">
+                        Get in Touch <i data-lucide="send" class="w-5 h-5 ml-1"></i>
+                    </a>
+                    <a href="#"
+                        class="magnetic-btn inline-flex items-center gap-2 px-8 py-3.5 rounded-lg border border-slate-700 hover:border-slate-500 bg-slate-800/50 hover:bg-slate-800 text-white font-medium transition-all group">
+                        <i data-lucide="arrow-up" class="w-5 h-5 group-hover:text-primary transition-colors"></i>
+                        Back to Top
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- FOOTER                                                        -->
+        <!-- ============================================================ -->
         <footer class="py-8 text-center text-slate-500 text-sm border-t border-slate-800/80">
-            <p class="mb-2">Designed & Built with <span class="text-white">Tailwind CSS</span>, <span
-                    class="text-white">Alpine.js</span> & <span class="text-white">Lucide</span></p>
+            <p class="mb-2">Crafted with <span class="text-white">GSAP</span>, <span class="text-white">Three.js</span>,
+                <span class="text-white">Lenis</span> & <span class="text-white">Tailwind</span>
+            </p>
             <p class="font-mono text-xs opacity-50">&copy;
-                <script>document.write(new Date().getFullYear())</script> Crafted by You.
+                <script>document.write(new Date().getFullYear())</script> Wiroad Bunsree (NAP).
             </p>
         </footer>
+        <!-- ============================================================ -->
+        <!-- WECHAT QR CODE MODAL                                          -->
+        <!-- ============================================================ -->
+        <div id="wechatModal" class="wechat-modal-backdrop"
+            onclick="if(event.target===this)this.classList.remove('open')">
+            <div class="wechat-modal-content">
+                <button class="wechat-modal-close"
+                    onclick="document.getElementById('wechatModal').classList.remove('open')">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+                <div class="wechat-modal-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28">
+                        <path
+                            d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 01.213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 00.167-.054l1.903-1.114a.864.864 0 01.717-.098 10.16 10.16 0 002.837.403c.276 0 .543-.027.811-.05a6.42 6.42 0 01-.246-1.77c0-3.577 3.206-6.478 7.156-6.478.395 0 .778.036 1.156.086C16.816 4.498 13.103 2.188 8.691 2.188zm-2.93 5.13a.963.963 0 110-1.925.963.963 0 010 1.926zm5.86 0a.963.963 0 110-1.925.963.963 0 010 1.926zM24 14.652c0-3.249-3.168-5.883-7.07-5.883-3.903 0-7.07 2.634-7.07 5.883 0 3.248 3.167 5.882 7.07 5.882a8.71 8.71 0 002.34-.318.646.646 0 01.536.074l1.46.854a.254.254 0 00.127.041.22.22 0 00.222-.224c0-.054-.022-.108-.036-.163l-.3-1.137a.45.45 0 01.161-.51C23.028 18.278 24 16.578 24 14.652zm-9.372-.797a.782.782 0 110-1.565.782.782 0 010 1.565zm4.604 0a.782.782 0 110-1.565.782.782 0 010 1.565z" />
+                    </svg>
+                </div>
+                <h3 class="wechat-modal-title">Scan to Connect</h3>
+                <p class="wechat-modal-subtitle">Open WeChat and scan this QR code to add me</p>
+                <div class="wechat-qr-wrapper">
+                    <img src="images/contact/wechat.jpg" alt="WeChat QR Code" class="wechat-qr-img">
+                </div>
+                <div class="wechat-modal-footer">
+                    <span class="wechat-modal-dot"></span>
+                    WeChat · Wiroad Bunsree
+                </div>
+            </div>
+        </div>
+
     </main>
 
-    <!-- Initialize Lucide Icons -->
-    <script>
-        lucide.createIcons();
-    </script>
+    <!-- ============================================================ -->
+    <!-- APPLICATION SCRIPTS                                           -->
+    <!-- ============================================================ -->
+    <script src="js/lenis.js"></script>
+    <script src="js/three-bg.js"></script>
+    <script src="js/gsap-animations.js"></script>
+    <script src="js/loading.js"></script>
+    <script src="js/typewriter.js"></script>
+    <script src="js/interactions.js"></script>
+    <script src="data/portfolio-data.js"></script>
+    <script src="js/portfolio.js"></script>
+    <script src="js/app.js"></script>
+
+    <!-- ============================================================ -->
+    <!-- PRINTABLE A4 RESUME (Hidden on screen, shown on print)       -->
+    <!-- ============================================================ -->
+    <div id="printResume">
+        <!-- Header -->
+        <div class="print-header">
+            <div class="print-photo">
+                <img src="images/profile.jpg" alt="Wiroad Bunsree">
+            </div>
+            <div class="print-header-content">
+                <div class="print-name">Wiroad Bunsree <span class="print-nickname">(NAP)</span></div>
+                <div class="print-title">IT Professional & Developer</div>
+                <div class="print-contact">
+                    <span class="print-contact-item">
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" stroke-width="2.5"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                            <circle cx="12" cy="10" r="3" />
+                        </svg>
+                        Rayong, Thailand
+                    </span>
+                    <span class="print-sep">|</span>
+                    <span class="print-contact-item">
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" stroke-width="2.5"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="4" width="20" height="16" rx="2" />
+                            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                        </svg>
+                        vvww29@gmail.com
+                    </span>
+                    <span class="print-sep">|</span>
+                    <span class="print-contact-item">
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" stroke-width="2.5"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m22 2-7 20-4-9-9-4z" />
+                            <path d="M22 2 11 13" />
+                        </svg>
+                        t.me/naptun3
+                    </span>
+                    <span class="print-sep">|</span>
+                    <span class="print-contact-item">
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" stroke-width="2.5"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
+                        </svg>
+                        +66-85-883-2369
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- About -->
+        <div class="print-section">
+            <div class="print-section-title">About Me</div>
+            <p class="print-text">
+                I'm a 27-year-old developer with 2 years of hands-on IT experience.
+                My work spans web applications, desktop programs, API integrations, and publishing apps to the Google
+                Play Store.
+                Beyond development, I also manage Windows Servers to ensure continuous uptime,
+                as well as the internal network infrastructure across the factory.
+            </p>
+        </div>
+
+        <!-- Experience -->
+        <div class="print-section">
+            <div class="print-section-title">Experience</div>
+
+            <div class="print-exp">
+                <div class="print-exp-header">
+                    <strong>IT Programmer</strong>
+                    <span class="print-exp-date">2024 — 2026</span>
+                </div>
+                <div class="print-exp-company">THAI PAPPER MILL CO., LTD.</div>
+                <ul class="print-list">
+                    <li>Developed cross-platform web applications, desktop programs, and Android mobile applications.
+                    </li>
+                    <li>Managed network infrastructure including switch configuration and factory-wide LAN.</li>
+                    <li>Administered web servers and Active Directory servers ensuring seamless uptime.</li>
+                </ul>
+            </div>
+
+            <div class="print-exp">
+                <div class="print-exp-header">
+                    <strong>IT Intern / Trainee</strong>
+                    <span class="print-exp-date">2023 — 2024</span>
+                </div>
+                <div class="print-exp-company">I.T. SYSTEMS CO., LTD. & Mango Consultant</div>
+                <ul class="print-list">
+                    <li>Set up and configured CCTV Network systems at I.T. SYSTEMS COMPANY LIMITED.</li>
+                    <li>Designed Web Application UX/UI and user flows at Mango Consultant.</li>
+                    <li>Developed reporting modules for the ERP system at Mango Consultant.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Education -->
+        <div class="print-section">
+            <div class="print-section-title">Education</div>
+            <div class="print-exp">
+                <div class="print-exp-header">
+                    <strong>Bachelor of Science — Information Technology</strong>
+                    <span class="print-exp-date">2019 — 2023</span>
+                </div>
+                <div class="print-exp-company">Chiang Rai Rajabhat University | GPA: 2.65</div>
+            </div>
+        </div>
+
+        <!-- Skills -->
+        <div class="print-section">
+            <div class="print-section-title">Technical Skills</div>
+            <div class="print-skills">
+                <div class="print-skill-group">
+                    <span class="print-skill-label">Development:</span>
+                    PHP, C#, VB.NET, VB6, HTML/CSS/JS, REST API
+                </div>
+                <div class="print-skill-group">
+                    <span class="print-skill-label">Infrastructure:</span>
+                    Windows Server, Active Directory, IIS, Networking/LAN
+                </div>
+                <div class="print-skill-group">
+                    <span class="print-skill-label">Database & Tools:</span>
+                    MariaDB/MySQL, MS Access, AI Agentic, VM & Virtualization
+                </div>
+                <div class="print-skill-group">
+                    <span class="print-skill-label">Languages:</span>
+                    Thai (Excellent), English (Read/Write), Chinese (Fair)
+                </div>
+            </div>
+        </div>
+
+        <!-- Portfolio -->
+        <div class="print-section">
+            <div class="print-section-title">Selected Projects</div>
+            <div class="print-projects">
+                <div class="print-project">
+                    <strong>Module Portal</strong> <span class="print-tag">Web</span> — Centralized portal for 18+
+                    enterprise modules
+                </div>
+                <div class="print-project">
+                    <strong>CMMS</strong> <span class="print-tag">Web</span> — Maintenance management system tracking
+                    2,726+ machines
+                </div>
+                <div class="print-project">
+                    <strong>CMMS Telegram Bot</strong> <span class="print-tag">Bot</span> — Real-time repair ticket
+                    notifications
+                </div>
+                <div class="print-project">
+                    <strong>SmartView Security</strong> <span class="print-tag">Desktop</span> — Multi-camera CCTV
+                    monitoring
+                </div>
+                <div class="print-project">
+                    <strong>Contract Approval</strong> <span class="print-tag">Web</span> — Document approval tracking
+                    with PDF export
+                </div>
+                <div class="print-project">
+                    <strong>Roll Production Report</strong> <span class="print-tag">Web</span> — Production analytics
+                    dashboard (23,705+ tons)
+                </div>
+                <div class="print-project">
+                    <strong>AutoBot Macro</strong> <span class="print-tag">Desktop</span> — Keyboard/mouse macro
+                    recorder & player
+                </div>
+                <div class="print-project">
+                    <strong>LINE Bot — IP Lookup</strong> <span class="print-tag">Bot</span> — Employee info lookup via
+                    LINE & Google Sheets
+                </div>
+                <div class="print-project">
+                    <strong>TWA — Time Attendance</strong> <span class="print-tag">Mobile</span> — Fingerprint check-in
+                    app with GPS tracking
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Print Styles -->
+    <style>
+        /* Hide print resume on screen */
+        #printResume {
+            display: none;
+        }
+
+        @media print {
+
+            /* Hide everything except print resume */
+            body>*:not(#printResume) {
+                display: none !important;
+            }
+
+            #printResume {
+                display: block !important;
+            }
+
+            @page {
+                size: A4;
+                margin: 12mm 14mm;
+            }
+
+            body {
+                background: white !important;
+                color: #1a1a1a !important;
+                font-family: 'Inter', 'Segoe UI', sans-serif !important;
+                font-size: 9.5pt !important;
+                line-height: 1.45 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            .print-header {
+                display: flex;
+                align-items: center;
+                gap: 14pt;
+                padding-bottom: 10pt;
+                margin-bottom: 10pt;
+                border-bottom: 2pt solid #0ea5e9;
+            }
+
+            .print-header-content {
+                flex: 1;
+                text-align: left;
+            }
+
+            .print-photo {
+                width: 72pt;
+                height: 72pt;
+                flex-shrink: 0;
+                border: 2pt solid #0ea5e9;
+                border-radius: 6pt;
+                overflow: hidden;
+            }
+
+            .print-photo img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                display: block;
+            }
+
+            .print-name {
+                font-family: 'Space Grotesk', sans-serif;
+                font-size: 22pt;
+                font-weight: 800;
+                color: #0f172a;
+                letter-spacing: -0.5px;
+            }
+
+            .print-nickname {
+                color: #0ea5e9;
+                font-weight: 600;
+            }
+
+            .print-title {
+                font-size: 11pt;
+                color: #475569;
+                margin-top: 2pt;
+                font-weight: 500;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+            }
+
+            .print-contact {
+                margin-top: 6pt;
+                font-size: 8.5pt;
+                color: #64748b;
+                display: flex;
+                justify-content: flex-start;
+                flex-wrap: wrap;
+                gap: 4pt;
+            }
+
+            .print-sep {
+                color: #cbd5e1;
+                margin: 0 2pt;
+            }
+
+            .print-contact-item {
+                display: inline-flex;
+                align-items: center;
+                gap: 3pt;
+            }
+
+            .print-contact-item svg {
+                flex-shrink: 0;
+            }
+
+            .print-section {
+                margin-bottom: 10pt;
+            }
+
+            .print-section-title {
+                font-family: 'Space Grotesk', sans-serif;
+                font-size: 11pt;
+                font-weight: 700;
+                color: #0ea5e9;
+                text-transform: uppercase;
+                letter-spacing: 1.5px;
+                padding-bottom: 3pt;
+                margin-bottom: 6pt;
+                border-bottom: 1px solid #e2e8f0;
+            }
+
+            .print-text {
+                color: #334155;
+                font-size: 9.5pt;
+                line-height: 1.5;
+            }
+
+            .print-exp {
+                margin-bottom: 8pt;
+            }
+
+            .print-exp-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: baseline;
+            }
+
+            .print-exp-header strong {
+                font-size: 10.5pt;
+                color: #0f172a;
+            }
+
+            .print-exp-date {
+                font-size: 8.5pt;
+                color: #64748b;
+                font-family: 'Fira Code', monospace;
+                background: #f1f5f9;
+                padding: 1pt 6pt;
+                border-radius: 3pt;
+            }
+
+            .print-exp-company {
+                font-size: 9pt;
+                color: #475569;
+                margin-top: 1pt;
+                font-style: italic;
+            }
+
+            .print-list {
+                margin: 4pt 0 0 14pt;
+                padding: 0;
+                list-style-type: disc;
+                color: #334155;
+                font-size: 9pt;
+            }
+
+            .print-list li {
+                margin-bottom: 1pt;
+            }
+
+            .print-skills {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 4pt 16pt;
+            }
+
+            .print-skill-group {
+                font-size: 9pt;
+                color: #334155;
+                line-height: 1.5;
+            }
+
+            .print-skill-label {
+                font-weight: 600;
+                color: #0f172a;
+            }
+
+            .print-projects {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 3pt 16pt;
+            }
+
+            .print-project {
+                font-size: 8.5pt;
+                color: #334155;
+                padding: 2pt 0;
+            }
+
+            .print-project strong {
+                color: #0f172a;
+            }
+
+            .print-tag {
+                display: inline-block;
+                font-size: 7pt;
+                font-weight: 600;
+                color: #0ea5e9;
+                background: #f0f9ff;
+                padding: 0 4pt;
+                border-radius: 2pt;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                vertical-align: middle;
+            }
+        }
+    </style>
 </body>
 
 </html>

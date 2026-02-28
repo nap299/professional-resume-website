@@ -1,0 +1,241 @@
+[
+    {
+        "id": 1,
+        "title": "Module Portal",
+        "type": "Web",
+        "typeIcon": "🌐",
+        "year": "2025",
+        "image": "images/portfolio/portal_webapp.png",
+        "description": "A centralized web portal for accessing all internal enterprise modules. Features a card-based dashboard with 18+ modules including Check-in/Check-out, CMMS, HRMS, POS, Sales Dashboard, IT Equipment Repair, Employee Cards, and Work Logs — all in one unified interface.",
+        "features": [
+            "Centralized Module Dashboard",
+            "Category Filtering & Search",
+            "Favorites System",
+            "Dark Mode UI",
+            "Role-based Module Access",
+            "Responsive Card Layout"
+        ],
+        "tech": [
+            "PHP",
+            "JavaScript",
+            "MariaDB",
+            "Bootstrap",
+            "REST API"
+        ]
+    },
+    {
+        "id": 2,
+        "title": "CMMS — Maintenance System",
+        "type": "Web",
+        "typeIcon": "🌐",
+        "year": "2025",
+        "image": "images/portfolio/cmms_webapp.png",
+        "description": "A Computerized Maintenance Management System (CMMS) for tracking repair tickets, equipment status, and maintenance workflows. Includes a real-time dashboard with repair statistics, equipment status donut chart (2,726 machines tracked), task assignment, and review scoring.",
+        "features": [
+            "Real-time Maintenance Dashboard",
+            "Repair Ticket Management",
+            "Equipment Status Tracking (2,726+)",
+            "Task Assignment & Workflow",
+            "Review & Scoring System",
+            "Repair History & Analytics"
+        ],
+        "tech": [
+            "PHP",
+            "MariaDB",
+            "JavaScript",
+            "Chart.js",
+            "Bootstrap"
+        ]
+    },
+    {
+        "id": 3,
+        "title": "CMMS Telegram Bot",
+        "type": "Web",
+        "typeIcon": "🤖",
+        "year": "2025",
+        "image": "images/portfolio/cmms_bot.png",
+        "description": "A Telegram Bot integrated with the CMMS system that automatically notifies maintenance teams about new repair tickets in real-time. Sends structured messages with reporter info, equipment details, location, symptoms, and timestamps to a dedicated Telegram group.",
+        "features": [
+            "Real-time Ticket Notifications",
+            "Structured Message Format",
+            "Equipment & Location Details",
+            "Auto-broadcast to Group",
+            "CMMS API Integration",
+            "24/7 Automated Alerts"
+        ],
+        "tech": [
+            "PHP",
+            "Telegram Bot API",
+            "REST API",
+            "MariaDB",
+            "Webhook"
+        ]
+    },
+    {
+        "id": 4,
+        "title": "SmartView Security Monitor",
+        "type": "Desktop",
+        "typeIcon": "🖥️",
+        "year": "2025",
+        "image": "images/portfolio/desktopapp_c%23.png",
+        "description": "A custom-built Windows desktop application for live CCTV monitoring across the factory. Displays multi-camera grid views organized by zones (office, warehouse, production, etc.) with real-time video feeds, system online status, and toggle between factory floor and older cameras.",
+        "features": [
+            "Multi-camera Grid View",
+            "Zone-based Organization",
+            "Live Video Feeds",
+            "System Online Status",
+            "Camera Toggle (Floor/Old)",
+            "Full-screen & Graphic Design Views"
+        ],
+        "tech": [
+            "C#",
+            "Windows Forms",
+            ".NET",
+            "RTSP",
+            "IP Camera SDK"
+        ]
+    },
+    {
+        "id": 5,
+        "title": "Contract Approval System",
+        "type": "Web",
+        "typeIcon": "🌐",
+        "year": "2025",
+        "image": "images/portfolio/pactum_webapp.png",
+        "description": "A document approval tracking system for employee contracts. Features a clean dashboard showing total documents, pending/approved status with progress bars, and downloadable PDF exports. Supports filtering by approval status and search by employee ID.",
+        "features": [
+            "Document Status Dashboard",
+            "Approval Workflow Tracking",
+            "Progress Bar Indicators",
+            "PDF Download & Export",
+            "Employee ID Search",
+            "Status Filtering (Pending/Approved)"
+        ],
+        "tech": [
+            "PHP",
+            "MariaDB",
+            "JavaScript",
+            "Bootstrap",
+            "PDF Generation"
+        ]
+    },
+    {
+        "id": 6,
+        "title": "Roll Production Report",
+        "type": "Web",
+        "typeIcon": "🌐",
+        "year": "2026",
+        "image": "images/portfolio/roll_report.png",
+        "description": "A production analytics dashboard for paper mill operations. Displays yearly/monthly/daily production output (23,705+ tons), machine-specific yields with bar charts, and grade-based breakdowns with donut charts. Real-time data visualization for PM1–PM5 production lines.",
+        "features": [
+            "Yearly Production Overview",
+            "Machine-specific Output Charts",
+            "Grade-based Breakdown",
+            "Daily/Monthly/Yearly Filters",
+            "Interactive Donut & Bar Charts",
+            "Roll Report PDF Export"
+        ],
+        "tech": [
+            "PHP",
+            "MariaDB",
+            "Chart.js",
+            "JavaScript",
+            "Bootstrap"
+        ]
+    },
+    {
+        "id": 7,
+        "title": "AutoBot Macro Recorder",
+        "type": "Desktop",
+        "typeIcon": "🖥️",
+        "year": "2025",
+        "image": "images/portfolio/autobot marco_desktopapp.png",
+        "description": "A Windows desktop automation tool for recording and replaying keyboard/mouse macros. Features one-click recording (F5), stopping, and playback (F6) with support for single or continuous execution. Saves macro scripts with timestamps for reuse.",
+        "features": [
+            "Macro Recording (F5)",
+            "Playback Single/Continuous (F6)",
+            "Macro Script Management",
+            "Rename & Delete Macros",
+            "Hotkey Controls",
+            "Lightweight & Portable"
+        ],
+        "tech": [
+            "C#",
+            "Windows Forms",
+            ".NET",
+            "Win32 API"
+        ]
+    },
+    {
+        "id": 8,
+        "title": "LINE Bot — IP Address Lookup",
+        "type": "Web",
+        "typeIcon": "🤖",
+        "year": "2025",
+        "image": "images/portfolio/line_bot_appscript_googlesheet.png",
+        "description": "A LINE Bot integrated with Google Sheets via Apps Script for real-time IP address lookup. Users can query employee info by IP address and receive structured responses including department, name, and desk number — useful for IT helpdesk and network troubleshooting.",
+        "features": [
+            "IP Address Lookup",
+            "Employee Info Response",
+            "Google Sheets Integration",
+            "Apps Script Backend",
+            "Real-time Query",
+            "Department & Desk Mapping"
+        ],
+        "tech": [
+            "Google Apps Script",
+            "LINE Messaging API",
+            "Google Sheets",
+            "Webhook"
+        ]
+    },
+    {
+        "id": 9,
+        "title": "TWA — Time Attendance App",
+        "type": "Mobile",
+        "typeIcon": "📱",
+        "year": "2026",
+        "image": "images/portfolio/twa_application_inout.png",
+        "description": "A modern mobile-first time attendance application for factory employees. Features fingerprint scanning for check-in/check-out, real-time clock display, weekly working hours summary, GPS-based location tracking, and a beautiful gradient UI with dark/light themes.",
+        "features": [
+            "Fingerprint Check-in/Check-out",
+            "Real-time Clock Display",
+            "Weekly Hours Summary",
+            "GPS Location Tracking",
+            "Dark & Light Theme",
+            "Employee Profile Dashboard"
+        ],
+        "tech": [
+            "PWA",
+            "PHP",
+            "JavaScript",
+            "MariaDB",
+            "Geolocation API",
+            "Biometric API"
+        ]
+    },
+    {
+        "id": 10,
+        "title": "TWA — Light Theme",
+        "type": "Mobile",
+        "typeIcon": "📱",
+        "year": "2026",
+        "image": "images/portfolio/twa_application_inout2.png",
+        "description": "The light theme variant of the TWA time attendance application, featuring a soft pink gradient design. Demonstrates the app's theme customization capability with the same full functionality — fingerprint scanning, GPS tracking, working hours display, and employee profile.",
+        "features": [
+            "Light Theme Design",
+            "Gradient Pink UI",
+            "Same Full Functionality",
+            "Theme Customization",
+            "Responsive Mobile Layout",
+            "Brand-consistent Design"
+        ],
+        "tech": [
+            "PWA",
+            "PHP",
+            "JavaScript",
+            "MariaDB",
+            "CSS Custom Properties"
+        ]
+    }
+]

@@ -1,0 +1,633 @@
+/* ===== BASE STYLES ===== */
+html {
+    scroll-behavior: auto !important;
+}
+
+html.lenis,
+html.lenis body {
+    height: auto;
+}
+
+.lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+/* ===== GLASS EFFECT ===== */
+.glass {
+    background: rgba(15, 23, 42, 0.7);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* ===== GRADIENT TEXT ===== */
+.gradient-text {
+    background: linear-gradient(135deg, #0ea5e9, #8b5cf6, #ec4899);
+    background-size: 200% 200%;
+    animation: gradient-shift 6s ease infinite;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+@keyframes gradient-shift {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* ===== UTILITY ===== */
+[x-cloak] {
+    display: none !important;
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #020617;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #1e293b;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #334155;
+}
+
+/* ===== WEBGL CANVAS ===== */
+#webgl-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* ===== SCROLL PROGRESS ===== */
+.scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #0ea5e9, #8b5cf6, #ec4899);
+    z-index: 9999;
+    width: 0%;
+    transform-origin: left;
+}
+
+/* ===== LOADING SCREEN ===== */
+.loading-screen {
+    position: fixed;
+    inset: 0;
+    background: #020617;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 24px;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+
+.loading-screen.done {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 2px solid rgba(14, 165, 233, 0.1);
+    border-top-color: #0ea5e9;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.loading-counter {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 48px;
+    font-weight: 800;
+    color: white;
+    letter-spacing: -2px;
+}
+
+.loading-label {
+    font-family: 'Fira Code', monospace;
+    font-size: 12px;
+    color: #475569;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+}
+
+/* ===== NOISE OVERLAY ===== */
+.noise-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 256px;
+}
+
+/* ===== SECTION DIVIDER ===== */
+.section-line {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(14, 165, 233, 0.2), rgba(139, 92, 246, 0.2), transparent);
+}
+
+/* ===== TYPEWRITER CURSOR ===== */
+.typewriter-cursor {
+    display: inline-block;
+    width: 2px;
+    height: 1em;
+    background: #0ea5e9;
+    margin-left: 4px;
+    animation: cursor-blink 1s step-end infinite;
+    vertical-align: text-bottom;
+}
+
+@keyframes cursor-blink {
+    50% {
+        opacity: 0;
+    }
+}
+
+/* ===== NAV LINK ===== */
+.nav-link {
+    position: relative;
+    padding-bottom: 4px;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0%;
+    height: 2px;
+    background: linear-gradient(90deg, #0ea5e9, #8b5cf6);
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+.nav-link.active {
+    color: #0ea5e9;
+}
+
+.nav-link.active::after {
+    width: 100%;
+}
+
+/* ===== MAGNETIC BUTTON ===== */
+.magnetic-btn {
+    transition: transform 0.2s ease-out;
+}
+
+/* ===== GLOW CARD ===== */
+.glow-card {
+    position: relative;
+}
+
+.glow-card::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: 1rem;
+    background: linear-gradient(135deg, transparent, rgba(14, 165, 233, 0.15), transparent, rgba(139, 92, 246, 0.15), transparent);
+    background-size: 300% 300%;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    animation: glow-sweep 5s ease infinite;
+}
+
+.glow-card:hover::before {
+    opacity: 1;
+}
+
+@keyframes glow-sweep {
+    0% {
+        background-position: 0% 0%;
+    }
+
+    50% {
+        background-position: 100% 100%;
+    }
+
+    100% {
+        background-position: 0% 0%;
+    }
+}
+
+/* ===== TILT CARD ===== */
+.tilt-card {
+    transform-style: preserve-3d;
+    transition: transform 0.15s ease-out;
+}
+
+.tilt-card-inner {
+    transform: translateZ(20px);
+}
+
+/* ===== SCROLL INDICATOR ===== */
+.scroll-indicator {
+    animation: bounce-down 2s ease-in-out infinite;
+}
+
+@keyframes bounce-down {
+
+    0%,
+    100% {
+        transform: translateY(0);
+        opacity: 0.5;
+    }
+
+    50% {
+        transform: translateY(12px);
+        opacity: 1;
+    }
+}
+
+/* ===== GSAP HIDDEN STATE ===== */
+.gsap-reveal {
+    visibility: hidden;
+}
+
+/* ===== PORTFOLIO STYLES ===== */
+.portfolio-filter-btn {
+    position: relative;
+    padding: 8px 20px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #64748b;
+    border-radius: 9999px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: 1px solid transparent;
+    background: transparent;
+    font-family: 'Space Grotesk', sans-serif;
+    letter-spacing: 0.5px;
+}
+
+.portfolio-filter-btn:hover {
+    color: #e2e8f0;
+}
+
+.portfolio-filter-btn.active {
+    color: #fff;
+    background: rgba(14, 165, 233, 0.15);
+    border-color: rgba(14, 165, 233, 0.3);
+    box-shadow: 0 0 20px rgba(14, 165, 233, 0.1);
+}
+
+.portfolio-card {
+    position: relative;
+    border-radius: 1rem;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    transform-style: preserve-3d;
+    border: 1px solid rgba(30, 41, 59, 0.8);
+    background: #0f172a;
+}
+
+.portfolio-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    border-color: rgba(14, 165, 233, 0.3);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4),
+        0 0 40px rgba(14, 165, 233, 0.08);
+}
+
+.portfolio-card-img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.portfolio-card:hover .portfolio-card-img {
+    transform: scale(1.08);
+}
+
+.portfolio-card-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 30%, rgba(2, 6, 23, 0.95) 100%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 24px;
+}
+
+.portfolio-card:hover .portfolio-card-overlay {
+    opacity: 1;
+}
+
+.portfolio-card-content {
+    padding: 20px;
+    position: relative;
+    z-index: 2;
+}
+
+.portfolio-card-gradient {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60%;
+    background: linear-gradient(to top, #0f172a, transparent);
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* ===== PORTFOLIO MODAL ===== */
+.portfolio-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(2, 6, 23, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    z-index: 99990;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.portfolio-modal-backdrop.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.portfolio-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+    z-index: 99991;
+    width: 90vw;
+    max-width: 900px;
+    max-height: 85vh;
+    overflow-y: auto;
+    background: #0f172a;
+    border: 1px solid rgba(30, 41, 59, 0.8);
+    border-radius: 1.5rem;
+    box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5),
+        0 0 60px rgba(14, 165, 233, 0.05);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.portfolio-modal.open {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.portfolio-modal::-webkit-scrollbar {
+    width: 4px;
+}
+
+.portfolio-modal::-webkit-scrollbar-thumb {
+    background: #1e293b;
+    border-radius: 2px;
+}
+
+.portfolio-modal-img {
+    width: 100%;
+    height: 350px;
+    object-fit: cover;
+    border-radius: 1.5rem 1.5rem 0 0;
+}
+
+.portfolio-type-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 9999px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-family: 'Fira Code', monospace;
+}
+
+.badge-web {
+    background: rgba(14, 165, 233, 0.15);
+    color: #0ea5e9;
+    border: 1px solid rgba(14, 165, 233, 0.25);
+}
+
+.badge-desktop {
+    background: rgba(139, 92, 246, 0.15);
+    color: #8b5cf6;
+    border: 1px solid rgba(139, 92, 246, 0.25);
+}
+
+.badge-mobile {
+    background: rgba(52, 211, 153, 0.15);
+    color: #34d399;
+    border: 1px solid rgba(52, 211, 153, 0.25);
+}
+
+/* ===== VIEW PROJECT BUTTON ===== */
+.portfolio-view-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 18px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    background: rgba(14, 165, 233, 0.2);
+    color: #0ea5e9;
+    border: 1px solid rgba(14, 165, 233, 0.3);
+    transition: all 0.3s ease;
+    transform: translateY(10px);
+    opacity: 0;
+}
+
+.portfolio-card:hover .portfolio-view-btn {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.portfolio-view-btn:hover {
+    background: rgba(14, 165, 233, 0.35);
+}
+
+/* ===== WECHAT QR CODE MODAL ===== */
+.wechat-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(2, 6, 23, 0.8);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    z-index: 99992;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.wechat-modal-backdrop.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.wechat-modal-content {
+    position: relative;
+    width: 90vw;
+    max-width: 340px;
+    max-height: 90vh;
+    overflow-y: auto;
+    background: linear-gradient(145deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.9));
+    border: 1px solid rgba(7, 193, 96, 0.2);
+    border-radius: 1.5rem;
+    padding: 28px 24px 24px;
+    text-align: center;
+    box-shadow:
+        0 40px 80px rgba(0, 0, 0, 0.5),
+        0 0 60px rgba(7, 193, 96, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    transform: scale(0.85) translateY(20px);
+    opacity: 0;
+    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.wechat-modal-backdrop.open .wechat-modal-content {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+}
+
+.wechat-modal-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(30, 41, 59, 0.8);
+    border: 1px solid rgba(51, 65, 85, 0.5);
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.wechat-modal-close:hover {
+    background: rgba(51, 65, 85, 0.8);
+    color: #fff;
+    transform: rotate(90deg);
+}
+
+.wechat-modal-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #07C160, #06AD56);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 14px;
+    box-shadow: 0 8px 24px rgba(7, 193, 96, 0.3);
+}
+
+.wechat-modal-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 4px;
+    letter-spacing: -0.5px;
+}
+
+.wechat-modal-subtitle {
+    font-size: 13px;
+    color: #64748b;
+    margin-bottom: 16px;
+    line-height: 1.4;
+}
+
+.wechat-qr-wrapper {
+    background: #fff;
+    border-radius: 12px;
+    padding: 8px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.wechat-qr-img {
+    width: 100%;
+    border-radius: 10px;
+    display: block;
+}
+
+.wechat-modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: 'Fira Code', monospace;
+    font-size: 12px;
+    color: #475569;
+    letter-spacing: 0.5px;
+}
+
+.wechat-modal-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #07C160;
+    box-shadow: 0 0 8px rgba(7, 193, 96, 0.5);
+    animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.4;
+    }
+}
