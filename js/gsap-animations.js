@@ -18,6 +18,17 @@ window.ResumeApp.animateHero = function () {
         stagger: 0.15,
         ease: 'power3.out',
     });
+
+    // Social icons — animate without visibility:hidden so they stay clickable
+    const socialEls = document.querySelectorAll('[data-animate="hero-social"]');
+    gsap.fromTo(socialEls, {
+        y: 30, opacity: 0,
+    }, {
+        y: 0, opacity: 1,
+        duration: 1,
+        delay: 0.8,
+        ease: 'power3.out',
+    });
 };
 
 /**

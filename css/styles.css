@@ -512,13 +512,13 @@ body {
 .wechat-modal-content {
     position: relative;
     width: 90vw;
-    max-width: 340px;
-    max-height: 90vh;
+    max-width: 300px;
+    max-height: 85vh;
     overflow-y: auto;
     background: linear-gradient(145deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.9));
     border: 1px solid rgba(7, 193, 96, 0.2);
     border-radius: 1.5rem;
-    padding: 28px 24px 24px;
+    padding: 24px 20px 20px;
     text-align: center;
     box-shadow:
         0 40px 80px rgba(0, 0, 0, 0.5),
@@ -536,10 +536,10 @@ body {
 
 .wechat-modal-close {
     position: absolute;
-    top: 14px;
-    right: 14px;
-    width: 36px;
-    height: 36px;
+    top: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
     background: rgba(30, 41, 59, 0.8);
     border: 1px solid rgba(51, 65, 85, 0.5);
@@ -549,6 +549,8 @@ body {
     justify-content: center;
     cursor: pointer;
     transition: all 0.3s ease;
+    z-index: 100;
+    pointer-events: auto;
 }
 
 .wechat-modal-close:hover {
@@ -572,10 +574,10 @@ body {
 
 .wechat-modal-title {
     font-family: 'Space Grotesk', sans-serif;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 700;
     color: #fff;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
     letter-spacing: -0.5px;
 }
 
@@ -589,8 +591,8 @@ body {
 .wechat-qr-wrapper {
     background: #fff;
     border-radius: 12px;
-    padding: 8px;
-    margin-bottom: 16px;
+    padding: 6px;
+    margin-bottom: 12px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
